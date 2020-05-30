@@ -21,6 +21,12 @@ router.post("/cadastro", function (req, res) {
   var senha = req.body.senha;
   var rg = req.body.rg;
   var data_nascimento = req.body.data_nascimento;
+  var saldo = req.body.saldo;
+  var comissao = req.body.comissao;
+  var metas = req.body.metas
+  var pontos = req.body.pontos
+  var produtosAdiquiridos = []
+  var invites = []
 
   var newUser = new User({
     nome: nome,
@@ -29,6 +35,12 @@ router.post("/cadastro", function (req, res) {
     senha: senha,
     rg: rg,
     data_nascimento: data_nascimento,
+    saldo: saldo,
+    comissao: comissao,
+    metas: metas,
+    pontos: pontos,
+    produtosAdiquiridos: produtosAdiquiridos,
+    invites: invites
   });
 
   User.createUser(newUser, function (err, user) {
@@ -54,13 +66,18 @@ router.post("/login", function (req, res) {
     }else {
 
       User.comparePassword(req.body.senha, user.senha, function (err, isMatch) {
-        if (err) throw err;
         if (isMatch) {
           const userRetorno = {
             'nome': user.nome,
             'email': user.email,
             'id': user._id,
-            'data_nascimento': user.data_nascimento
+            'data_nascimento': user.data_nascimento,
+            'saldo': user.saldo,
+            'comissao': user.comissao,
+            'metas': metas,
+            'pontos' : pontos,
+            'produtosAdiquiridos' : produtosAdiquiridos,
+            'invites' : invites
           };
           const token = jwt.sign(userRetorno, privateKeyJWT, {
             expiresIn: expiresTimeJWT,
