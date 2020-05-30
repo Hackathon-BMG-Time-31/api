@@ -11,9 +11,13 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-const settings = require('credentials.json');
+const settings = require('./credentials.json');
 
-mongoose.connect('mongodb+srv://time_31:'+settings.MongoDB.Password+'@cluster0-y0e9d.mongodb.net/test?retryWrites=true&w=majoritymongodb://aswinzz:loginapp@ds153732.mlab.com:53732/loginappavb');
+const mongoConnectionString = 'mongodb+srv://time_31:MYhgUjV0MiOTClor@cluster0-y0e9d.mongodb.net/test?retryWrites=true&w=majority';
+
+console.log('mongoConnectionString => ', mongoConnectionString)
+
+mongoose.connect(mongoConnectionString);
 var db = mongoose.connection;
 var users = require('./routes/users');
 var nodemailer = require('nodemailer');
@@ -61,7 +65,7 @@ app.use(function (req, res, next) {
 app.use('/users', users);
 
 // Set Port
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 
 app.listen(app.get('port'), function(){
 	console.log('Server started on port '+app.get('port'));
