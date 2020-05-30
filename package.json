@@ -19,6 +19,7 @@
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "*",
+    "cors": "^2.8.5",
     "crypto": "0.0.3",
     "express": "*",
     "express-handlebars": "*",
