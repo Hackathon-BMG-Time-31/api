@@ -8,7 +8,7 @@ app.get('/', async (req, res) => {
     res.json({message: 'Hello world!'});
 });
 
-
+      
 app.listen(port, (userDB, ) => {
   console.log(`Server running at http://localhost:${port}`)
   console.log('To shutdown the server: Ctrl + C')
