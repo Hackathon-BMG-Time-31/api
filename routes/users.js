@@ -14,7 +14,7 @@ const privateKeyJWT = settings.JWT.Key;
 const expiresTimeJWT = settings.JWT.ExpiresTime;
 
 // Register User
-router.post("/register", function (req, res) {
+router.post("/cadastro", function (req, res) {
   var nome = req.body.nome;
   var email = req.body.email;
   var cpf = req.body.cpf;
@@ -32,39 +32,49 @@ router.post("/register", function (req, res) {
   });
 
   User.createUser(newUser, function (err, user) {
-    if (err) throw err;
-    console.log(user);
-  });
-
-  req.flash("success_msg", "You are registered and can now login");
-
-  res.json({
-    mensagem: "usuario cadastrado com sucesso",
+    if (err){
+      res
+          .status(400)
+          .send({ auth: falso, message: "Erro no cadastro", token: null });
+    }else{
+      res
+          .status(200)
+          .send({ auth: true, message: "Cadastro realizado com sucesso", token: null });
+    }
   });
 });
 
 router.post("/login", function (req, res) {
-  console.log(req.body.cpf);
   User.getUserByCpf(req.body.cpf, function (err, user) {
-    if (err) throw err;
+    console.log(user)
     if (!user) {
-      console.log("usuario não encontrado");
-    }
+      res
+          .status(400)
+          .send({ auth: false, message: "Usuário não encontrado", token: null });
+    }else {
 
-    User.comparePassword(req.body.senha, user.senha, function (err, isMatch) {
-      if (err) throw err;
-      if (isMatch) {
-        const userRetorno = {};
-        const token = jwt.sign(userRetorno, privateKeyJWT, {
-          expiresIn: expiresTimeJWT,
-        });
-        res
-          .status(200)
-          .send({ auth: true, message: "Login successfully", token: token });
-      } else {
-        console.log("invalid password");
-      }
-    });
+      User.comparePassword(req.body.senha, user.senha, function (err, isMatch) {
+        if (err) throw err;
+        if (isMatch) {
+          const userRetorno = {
+            'nome': user.nome,
+            'email': user.email,
+            'id': user._id,
+            'data_nascimento': user.data_nascimento
+          };
+          const token = jwt.sign(userRetorno, privateKeyJWT, {
+            expiresIn: expiresTimeJWT,
+          });
+          res
+            .status(200)
+            .send({ auth: true, message: "Login realizado com sucesso", token: token });
+        } else {
+          res
+            .status(400)
+            .send({ auth: false, message: "Senha invalida", token: null });
+        }
+      });
+    }
   });
 });
 
