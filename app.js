@@ -11,10 +11,13 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://time_31:MYhgUjV0MiOTClor@cluster0-y0e9d.mongodb.net/test?retryWrites=true&w=majoritymongodb://aswinzz:loginapp@ds153732.mlab.com:53732/loginappavb');
+const settings = require('credentials.json');
+
+mongoose.connect('mongodb+srv://time_31:'+settings.MongoDB.Password+'@cluster0-y0e9d.mongodb.net/test?retryWrites=true&w=majoritymongodb://aswinzz:loginapp@ds153732.mlab.com:53732/loginappavb');
 var db = mongoose.connection;
 var users = require('./routes/users');
 var nodemailer = require('nodemailer');
+
 // Init App
 var app = express();
 

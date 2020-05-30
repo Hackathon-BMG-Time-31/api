@@ -8,6 +8,10 @@ var crypto = bluebird.promisifyAll(require('crypto'));
 var async = require('async');
 var User = require('../models/user');
 var bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const settings = require('credentials.json');
+const privateKeyJWT = settings.JWT.Key;
+const expiresTimeJWT = settings.JWT.ExpiresTime;
 
 // Register
 router.get('/register', function(req, res){
@@ -61,7 +65,11 @@ router.post('/login', function(req, res) {
 		User.comparePassword(req.body.senha, user.senha, function(err, isMatch){
 			if(err) throw err;
 			if(isMatch){
-				console.log('Succeso');
+				
+				const token = jwt.sign(user, privateKeyJWT, {
+					expiresIn: 3000
+				});
+				res.status(200).send({auth: true, message: 'Login successfully', token: token});
 			} else {
 				console.log("invalid password");
 			}
