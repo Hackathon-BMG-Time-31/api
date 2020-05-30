@@ -1,20 +1,37 @@
 {
-  "name": "api",
+  "name": "login",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+  "engines": {
+    "node": "6.11.0",
+    "npm": "3.10.10"
   },
-  "keywords": [],
-  "author": "",
+  "description": "simple authentication system",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "aswin",
   "license": "ISC",
   "dependencies": {
-    "debug": "^4.1.1",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
+    "async": "^2.4.1",
+    "bcryptjs": "*",
+    "bluebird": "^3.5.0",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "*",
+    "crypto": "0.0.3",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mongodb": "*",
+    "mongoose": "*",
+    "nodemailer": "^4.0.1",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*",
+    "xoauth2": "^1.2.0"
   }
 }
