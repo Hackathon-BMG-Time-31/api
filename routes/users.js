@@ -42,6 +42,25 @@ router.post("/cadastro", function (req, res) {
   var pontos = 150;
   var produtosAdiquiridos = [];
   var invites = [];
+  var refer = req.body.refer;
+
+  if (refer){
+    User.getUserById(refer, function (err, user) {
+      console.log(user);
+      if (!user) {
+        res
+          .status(400)
+          .send({ auth: false, message: "Usuário não encontrado", token: null });
+      }else{
+        user.saldo = user.saldo + 10
+        user.invites.push({
+          "nome": nome,
+          "valor_recebido": 10
+        })
+        user.save();
+      }
+    })
+  }
 
   var newUser = new User({
     nome: nome,
