@@ -9,7 +9,7 @@ var async = require("async");
 var User = require("../models/user");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validadorCpf = require('validar-cpf');
+const validadorCpf = require("validar-cpf");
 const validateEmail = require("email-validator");
 const settings = require("../credentials.json");
 const privateKeyJWT = settings.JWT.Key;
@@ -30,67 +30,36 @@ const verifyJWT = (req, res, next) => {
   });
 };
 
-
-function validation(email, cpf, res){
-  if(!validateEmail.validate(email)){
-    res
-        .status(401)
-        .send({
-          auth: false,
-          message: "Email invalido",
-          token: null,
-        });
-    return false
+function validation(email, cpf, res) {
+  if (!validateEmail.validate(email)) {
+    return false;
   }
 
-  if(!validadorCpf(cpf)){
-    res
-        .status(401)
-        .send({
-          auth: false,
-          message: "Cpf invalido",
-          token: null,
-        });
-    return false
+  if (!validadorCpf(cpf)) {
+    return false;
   }
-  console.log("aqui")
+  console.log("aqui");
   User.getUserByEmail(email, function (err, user) {
     if (user) {
-      res
-        .status(401)
-        .send({
-          auth: false,
-          message: "Email já cadastrado",
-          token: null,
-        });
-      
-      return false
+      return false;
     }
-    console.log("aqui")
+    console.log("aqui");
     User.getUserByCpf(cpf, function (err, user) {
-      if(user){
-        res
-          .status(401)
-          .send({
-            auth: false,
-            message: "Cpf já cadastrado",
-            token: null,
-          });
-        return false
+      if (user) {
+        return false;
       }
-    })
-  })
+    });
+  });
 
-  return true
+  return true;
 }
-
 
 // Register User
 router.post("/cadastro", function (req, res) {
   var nome = req.body.nome;
-  var email = req.body.email;  
+  var email = req.body.email;
   var cpf = req.body.cpf.toString();
-  if(validation(email, cpf, res)){
+  if (validation(email, cpf, res)) {
     var senha = req.body.senha;
     var rg = req.body.rg.toString();
     var data_nascimento = req.body.data_nascimento;
@@ -102,21 +71,17 @@ router.post("/cadastro", function (req, res) {
     var invites = [];
     var refer = req.body.refer;
 
-    if (refer){
+    if (refer) {
       User.getUserById(refer, function (err, user) {
-        if (!user) {
-          res
-            .status(401)
-            .send({ auth: false, message: "Usuário não encontrado", token: null });
-        }else{
-          user.saldo = user.saldo + 10
+        if (user) {
+          user.saldo = user.saldo + 10;
           user.invites.push({
-            "nome": nome,
-            "valor_recebido": 10
-          })
+            nome: nome,
+            valor_recebido: 10,
+          });
           user.save();
         }
-      })
+      });
     }
 
     var newUser = new User({
@@ -137,21 +102,19 @@ router.post("/cadastro", function (req, res) {
     User.createUser(newUser, function (err, user) {
       if (err) {
         res
-          .status(401)
+          .status(400)
           .send({ auth: false, message: "Erro no cadastro", token: null });
       } else {
-        res
-          .status(200)
-          .send({
-            auth: true,
-            message: "Cadastro realizado com sucesso",
-            token: null,
-          });
+        res.status(200).send({
+          auth: true,
+          message: "Cadastro realizado com sucesso",
+          token: null,
+        });
       }
-    
     });
+  } else {
+    res.status(400).json({ mensagem: "Usuário já cadastrado", sucesso: false });
   }
-        
 });
 
 router.get("/get", verifyJWT, function (req, res) {
@@ -165,7 +128,7 @@ router.post("/login", function (req, res) {
     console.log(user);
     if (!user) {
       res
-        .status(401)
+        .status(400)
         .send({ auth: false, message: "Usuário não encontrado", token: null });
     } else {
       User.comparePassword(req.body.senha, user.senha, function (err, isMatch) {
@@ -185,13 +148,11 @@ router.post("/login", function (req, res) {
           const token = jwt.sign(userRetorno, privateKeyJWT, {
             expiresIn: expiresTimeJWT,
           });
-          res
-            .status(200)
-            .send({
-              auth: true,
-              message: "Login realizado com sucesso",
-              token: token,
-            });
+          res.status(200).send({
+            auth: true,
+            message: "Login realizado com sucesso",
+            token: token,
+          });
         } else {
           res
             .status(401)
