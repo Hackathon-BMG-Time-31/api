@@ -81,7 +81,7 @@ router.post("/cadastro", function (req, res) {
     if (err) {
       res
         .status(400)
-        .send({ auth: falso, message: "Erro no cadastro", token: null });
+        .send({ auth: false, message: "Erro no cadastro", token: null });
     } else {
       res
         .status(200)
