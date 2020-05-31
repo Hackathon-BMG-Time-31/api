@@ -21,6 +21,7 @@
     "cookie-parser": "*",
     "cors": "^2.8.5",
     "crypto": "0.0.3",
+    "email-validator": "^2.0.4",
     "express": "*",
     "express-handlebars": "*",
     "express-messages": "*",
@@ -34,6 +35,7 @@
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
+    "validar-cpf": "^2.1.2",
     "xoauth2": "^1.2.0"
   },
   "devDependencies": {

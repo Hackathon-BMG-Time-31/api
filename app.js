@@ -10,6 +10,7 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
+const validadorCpf = require('validar-cpf');
 mongoose.Promise = global.Promise;
 const settings = require("./credentials.json");
 var cors = require("cors");

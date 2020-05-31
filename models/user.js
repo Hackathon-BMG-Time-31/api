@@ -7,14 +7,14 @@ var UserSchema = mongoose.Schema({
 		type: String		
 	},
 	cpf: {
-		type: Number,
+		type: String,
 		index:true
 	},
 	email: {
 		type: String
 	},
 	rg: {
-		type: Number
+		type: String
 	},
 	data_nascimento: {
 		type: String
@@ -51,6 +51,11 @@ module.exports.createUser = function(newUser, callback){
 	        newUser.save(callback);
 	    });
 	});
+}
+
+module.exports.getUserByEmail = function(email, callback){
+	var query = {email: email};
+	User.findOne(query, callback);
 }
 
 module.exports.getUserByCpf = function(cpf, callback){
